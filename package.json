@@ -1,0 +1,27 @@
+{
+  "name": "challenge-12-employee-tracker",
+  "version": "1.0.0",
+  "description": "a command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^8.1.2",
+    "jest": "^27.0.6",
+    "mysql2": "^2.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaidHadad/Challenge-12-Employee-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SaidHadad/Challenge-12-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/SaidHadad/Challenge-12-Employee-Tracker#readme"
+}
