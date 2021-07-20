@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS deparment;
+DROP TABLE IF EXISTS department;
 
--- CREATE deparment table first because role has a dependency on deparment id
+-- CREATE department table first because role has a dependency on deparment id
 CREATE TABLE department (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
