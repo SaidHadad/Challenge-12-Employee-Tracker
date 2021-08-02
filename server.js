@@ -213,5 +213,54 @@ function addRole() {
   });
 };
   
+function addEmployee() {
+  inquirer.prompt([
+    {
+      name: "firstName",
+      type: "input",
+      message: "What's the employee first name?"
+    },
+    {
+      name: "lastName",
+      type: "input",
+      message: "What's the employee last name?"
+    }
+  ]).then(function (firstPrompt) {
+    connection.query(`SELECT * FROM employees;`, function (err, res) {
+      const managers = res.map(({id, first_name, last_name}) => ({
+        name: first_name + " " + last_name,
+        value: id
+      }));
+      inquirer.prompt([
+        {
+          name: "manager",
+          type: "list",
+          message: "Who's the employee's manager",
+          choices: managers
+        }
+      ]).then(function (secondPrompt) { 
+          connection.query(`SELECT * FROM role;`, function (err, res) {
+            const roles = res.map(({id, title}) => ({
+              name: title,
+              value: id
+            }));
+            inquirer.prompt([
+              {
+                name: "role",
+                type: "list",
+                message: "What's the employee role",
+                choices: roles
+              }
+            ]).then(function (thirdPrompt) {
+              console.log(firstPrompt.firstName, firstPrompt.lastName, thirdPrompt.role, secondPrompt.manager);
+              connection.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                VALUES ("${firstPrompt.firstName}", "${firstPrompt.lastName}", "${thirdPrompt.role}", "${secondPrompt.manager}");`);
+                console.log("Employee added successfully");
+            });
+          });
+      });
+    });
+  });
+};
 
 beginPrompt();
