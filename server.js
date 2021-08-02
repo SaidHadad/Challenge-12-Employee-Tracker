@@ -27,9 +27,7 @@ function beginPrompt() {
         "Add a Role",
         "Add an Employee",
         new separator ("======== Update ========="),
-        "Update an Employee",
-        "Update an Employee Manager",
-        "Update an Emmployee Deparment",
+        "Update an Employee Role",
         new separator ("======== Delete ========="),
         "Delete a Department",
         "Delete a Role",
@@ -66,7 +64,7 @@ function beginPrompt() {
         addEmployee();
       break;
       case "Update an Employee Role":
-        updateEmployees();
+        updateEmployee();
       break;
       case "Delete Department":
         deleteDepartment();
@@ -82,7 +80,7 @@ function beginPrompt() {
   });
 };
 
-// =========================================== VIEW =======================================
+// =========================================== VIEW ==================================
 function viewDept() {
   connection.query(`SELECT * FROM department;`, function (err, res) {
       if (err) throw err;
@@ -256,9 +254,41 @@ function addEmployee() {
               connection.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
                 VALUES ("${firstPrompt.firstName}", "${firstPrompt.lastName}", "${thirdPrompt.role}", "${secondPrompt.manager}");`);
                 console.log("Employee added successfully");
+                beginPrompt();
             });
           });
       });
+    });
+  });
+};
+
+// ==================================== UPDATE =========================================
+
+function updateEmployee() {
+  console.log('hola');
+  connection.query(`SELECT * FROM employees;`, function (err, res) {
+    const choices = res.map(({id, first_name, last_name}) => ({
+      name: first_name + " " + last_name,
+      value: id
+    }));
+  inquirer.prompt([
+    {
+      name: "name",
+      type: "list",
+      message: "Select the employee you want to be updated:",
+      choices: choices
+    },
+    {
+      name: "role",
+      type: "input",
+      message: "Enter the new role ID for that employee"
+    },
+  ]).then(function(res){
+    let employee = res.name;
+    let role = res.role;
+    connection.query(`UPDATE employees set role_id = "${role}" WHERE first_name = "${employee}"`);
+    console.log('The employee has been updated!')
+    beginPrompt();
     });
   });
 };
