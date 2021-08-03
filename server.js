@@ -66,7 +66,7 @@ function beginPrompt() {
       case "Update an Employee Role":
         updateEmployee();
       break;
-      case "Delete Department":
+      case "Delete a Department":
         deleteDepartment();
       break;
       case "Delete a Role":
@@ -285,12 +285,58 @@ function updateEmployee() {
     },
   ]).then(function(res){
     let employee = res.name;
+    console.log(employee);
     let role = res.role;
-    connection.query(`UPDATE employees set role_id = "${role}" WHERE first_name = "${employee}"`);
+    connection.query(`UPDATE employees set role_id = "${role}" WHERE id = "${employee}";`)
     console.log('The employee has been updated!')
     beginPrompt();
     });
   });
 };
 
+// ==================================== DELETE =========================================
+
+function deleteDepartment() {
+  connection.query(`SELECT * FROM department;`, function (err, res) {
+    const choices = res.map(({id, name}) => ({
+      name: name,
+      value: id
+    }));
+    inquirer.prompt([
+      {
+        name: "department",
+        type: "list",
+        message: "Please select the department you want to delete:",
+        choices: choices,
+      }
+    ]).then(function(res) {
+      connection.query(`DELETE FROM department WHERE id = ${res.department};`, function (err, res) {
+        if (err) throw err;
+        console.log('Department deleted');
+      });
+    });
+  });
+};
+
+function deleteRole() {
+  connection.query(`SELECT * from role;`, function (err, res) {
+    const choices = res.map(({id, title}) => ({
+      name: title,
+      value: id
+    }));
+    inquirer.prompt([
+      {
+        name: "role",
+        type: "list",
+        message: "Please select the role you want to delete:",
+        choices: choices,
+      }
+    ]).then(function(res) {
+      connection.query(`DELETE FROM role WHERE id = ${res.role};`, function (err, res) {
+        if (err) throw err;
+        console.log('Department deleted');
+      });
+    });
+  });
+};
 beginPrompt();
