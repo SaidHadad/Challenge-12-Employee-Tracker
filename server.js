@@ -75,6 +75,7 @@ function beginPrompt() {
         deleteEmployee();
       case "Finish":
           console.log("You are done!");
+          process.exit();
       break;
     };
   });
@@ -98,7 +99,12 @@ function viewRoles() {
 };
 
 function viewEmployees() {
-  connection.query(`SELECT * FROM employees;`, function (err, res) {
+  connection.query(`
+  SELECT employees.id, employees.first_name, employees.last_name, role.title AS role, department.name AS department, role.salary, CONCAT(e.first_name, ' ', e.last_name) AS manager
+  FROM employees 
+  INNER JOIN role ON role.id = employees.role_id
+  INNER JOIN department ON department.id = role.department_id
+  JOIN employees e ON employees.manager_id = e.id;`, function (err, res) {
     if (err) throw err;
     console.table(res);
     beginPrompt();
@@ -250,7 +256,6 @@ function addEmployee() {
                 choices: roles
               }
             ]).then(function (thirdPrompt) {
-              console.log(firstPrompt.firstName, firstPrompt.lastName, thirdPrompt.role, secondPrompt.manager);
               connection.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
                 VALUES ("${firstPrompt.firstName}", "${firstPrompt.lastName}", "${thirdPrompt.role}", "${secondPrompt.manager}");`);
                 console.log("Employee added successfully");
@@ -313,6 +318,7 @@ function deleteDepartment() {
       connection.query(`DELETE FROM department WHERE id = ${res.department};`, function (err, res) {
         if (err) throw err;
         console.log('Department deleted');
+        beginPrompt();
       });
     });
   });
@@ -335,8 +341,33 @@ function deleteRole() {
       connection.query(`DELETE FROM role WHERE id = ${res.role};`, function (err, res) {
         if (err) throw err;
         console.log('Department deleted');
+        beginPrompt();
       });
     });
   });
 };
+
+function deleteEmployee() {
+  connection.query(`SELECT * from employees;`, function (err, res) {
+    const choices = res.map(({id, first_name}) => ({
+      name: first_name,
+      value: id
+    }));
+    inquirer.prompt([
+      {
+        name: "employee",
+        type: "list",
+        message: "Please select the employee you want to delete:",
+        choices: choices,
+      }
+    ]).then(function(res) {
+      connection.query(`DELETE FROM employees WHERE id = ${res.employee};`, function (err, res) {
+        if (err) throw err;
+        console.log('Employee deleted');
+        beginPrompt();
+      });
+    });
+  });
+};
+
 beginPrompt();
