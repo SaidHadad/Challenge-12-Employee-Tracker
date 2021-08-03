@@ -7,7 +7,8 @@
 
   <!-- DEPLOYED LINK -->
   Video: https://drive.google.com/file/d/1igisZp-gLnllVBkuM9Ci5gUFnEFfj_Jb/view
-  GitHub repository URL: https://github.com/SaidHadad/Challenge-11-Note-Taker
+  <br>
+  GitHub repository URL: https://github.com/SaidHadad/Challenge-12-Employee-Tracker
 
   <!-- TABLE OF CONTENTS -->
   <details open="open">
