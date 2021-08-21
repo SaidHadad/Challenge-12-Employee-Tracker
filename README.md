@@ -38,7 +38,10 @@
   
   ## Built With
 
-   JavaScript, E6S, Node, SQL, 
+   * JavaScript 
+   * E6S 
+   * Node.js
+   * SQL 
   
   <!-- GETTING STARTED -->
   
@@ -50,9 +53,11 @@
 
   ### Installation
 
-  npm install --y <br>
-  <br>
-  node server.js
+  cd navigate to the folder, install the npm dependencies with npm install. <br>
+  Once the dependencies are installed run the server with node server. <br>
+
+  This being a command-line application the app will prompt you to add the required information to navigate through the menus <br>
+
 
   <!-- CONTRIBUTING -->
     
